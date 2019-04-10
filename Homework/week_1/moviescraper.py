@@ -39,9 +39,37 @@ def extract_movies(dom):
     # Runtime(min)
     # Starting at line 665 in HTML
 
+    movies = []
+
+    # extract all the html movie data
+    for movie in dom.find_all("div", "lister-item-content"):
+        # get the title
+        title = movie.h3.a.string
+        print(title)
+
+        # get the rating
+        rating = movie.find_all("div", "inline-block ratings-imdb-rating")[0].strong.string
+        print(rating)
+
+        # get the year
+        year = movie.find_all("span", "lister-item-year text-muted unbold")[0].string.strip('()')
+        print(year)
+
+        # get the actors
+        actors = '"'
+        for actor in movie.find_all("a"):
+            if "adv_li_st_" in actor['href']:
+                # print(actor.string)
+                actors += actor.string
+        actors += '"'
+        print(actors)
 
 
-    for movie in dom.
+
+
+
+
+        # print(movie.h3.span.string)
 
 
 
@@ -54,7 +82,7 @@ def extract_movies(dom):
 
 
     # TODO
-    return []   # REPLACE THIS LINE AS WELL IF APPROPRIATE
+    return movies
 
 
 def save_csv(outfile, movies):

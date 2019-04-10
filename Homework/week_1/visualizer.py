@@ -26,7 +26,7 @@ def read_csv(path):
 
 def sort_data(data):
     """
-    Sorts data by year
+    Sorts data yearly average rating
     """
     # TODO
 

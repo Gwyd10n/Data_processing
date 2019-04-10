@@ -28,21 +28,19 @@ def extract_movies(dom):
     """
 
     movies = []
-
     # Extract all the html movie data
     for movie in dom.find_all("div", "lister-item-content"):
         # Get the title
         title = movie.h3.a.string
 
         # Get the rating
-        rating = float(movie.find_all("div", "inline-block ratings-imdb-rating")[0].strong.string)
+        rating = movie.find_all("div", "inline-block ratings-imdb-rating")[0].strong.string
 
         # Get the year
         year = ""
         for char in movie.find_all("span", "lister-item-year text-muted unbold")[0].string.strip('()'):
             if char.isdigit():
                 year += char
-        int(year)
 
         # Get the actors.
         actors = ""
@@ -54,7 +52,7 @@ def extract_movies(dom):
                     actors += ", " + actor.string
 
         # Get runtime
-        runtime = int(movie.find_all("span", "runtime")[0].string[:-4])
+        runtime = movie.find_all("span", "runtime")[0].string[:-4]
 
         # Append movie data to movies
         movies.append([title, rating, year, actors, runtime])

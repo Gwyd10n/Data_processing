@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# Name:
-# Student number:
+# Name: Gwydion Oostvogel
+# Student number: 12578002
 """
 This script visualizes data obtained from a .csv file
 """
@@ -16,5 +16,26 @@ END_YEAR = 2018
 # Global dictionary for the data
 data_dict = {str(key): [] for key in range(START_YEAR, END_YEAR)}
 
+
+def read_csv(path):
+    """
+    Reads data from input csv file and stores it in a list.
+    """
+    # TODO
+
+
+def sort_data(data):
+    """
+    Sorts data by year
+    """
+    # TODO
+
+def plot(data, parameters):
+    """
+    Plots data to graph
+    """
+
+
 if __name__ == "__main__":
+    read_csv(INPUT_CSV)
     print(data_dict)

@@ -56,13 +56,17 @@ def extract_movies(dom):
         print(year)
 
         # get the actors
-        actors = '"'
+        actor_arr = []
         for actor in movie.find_all("a"):
             if "adv_li_st_" in actor['href']:
-                # print(actor.string)
-                actors += actor.string
-        actors += '"'
-        print(actors)
+                print("in if")
+                print(actor.string)
+                actor_arr.append(actor.string)
+
+        print(actor_arr)
+
+        # actors += '"'
+        # print(actors)
 
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# Name:
-# Student number:
+# Name: Gwydion Oostvogel
+# Student number: 12578002
 """
 This script scrapes IMDB and outputs a CSV file with highest rated movies.
 """
@@ -27,65 +27,38 @@ def extract_movies(dom):
     - Runtime (only a number!)
     """
 
-    # ADD YOUR CODE HERE TO EXTRACT THE ABOVE INFORMATION ABOUT THE
-    # HIGHEST RATED MOVIES
-    # NOTE: FOR THIS EXERCISE YOU ARE ALLOWED (BUT NOT REQUIRED) TO IGNORE
-    # UNICODE CHARACTERS AND SIMPLY LEAVE THEM OUT OF THE OUTPUT.
-
-    # Title
-    # Rating
-    # Year
-    # Actors
-    # Runtime(min)
-    # Starting at line 665 in HTML
-
     movies = []
 
-    # extract all the html movie data
+    # Extract all the html movie data
     for movie in dom.find_all("div", "lister-item-content"):
-        # get the title
+        # Get the title
         title = movie.h3.a.string
-        print(title)
 
-        # get the rating
-        rating = movie.find_all("div", "inline-block ratings-imdb-rating")[0].strong.string
-        print(rating)
+        # Get the rating
+        rating = float(movie.find_all("div", "inline-block ratings-imdb-rating")[0].strong.string)
 
-        # get the year
-        year = movie.find_all("span", "lister-item-year text-muted unbold")[0].string.strip('()')
-        print(year)
+        # Get the year
+        year = ""
+        for char in movie.find_all("span", "lister-item-year text-muted unbold")[0].string.strip('()'):
+            if char.isdigit():
+                year += char
+        int(year)
 
-        # get the actors
-        actor_arr = []
+        # Get the actors.
+        actors = ""
         for actor in movie.find_all("a"):
             if "adv_li_st_" in actor['href']:
-                print("in if")
-                print(actor.string)
-                actor_arr.append(actor.string)
+                if len(actors) < 1:
+                    actors += actor.string
+                else:
+                    actors += ", " + actor.string
 
-        print(actor_arr)
+        # Get runtime
+        runtime = int(movie.find_all("span", "runtime")[0].string[:-4])
 
-        # actors += '"'
-        # print(actors)
+        # Append movie data to movies
+        movies.append([title, rating, year, actors, runtime])
 
-
-
-
-
-
-        # print(movie.h3.span.string)
-
-
-
-    # for movie in dom.find_all('h3'):
-        # print(type(movie))
-        # print(movie.title.)
-        # print(movie.title.string)
-        # if movie['href'].isalpha():
-            # print(movie['href'])
-
-
-    # TODO
     return movies
 
 
@@ -95,9 +68,8 @@ def save_csv(outfile, movies):
     """
     writer = csv.writer(outfile)
     writer.writerow(['Title', 'Rating', 'Year', 'Actors', 'Runtime'])
-
-    # ADD SOME CODE OF YOURSELF HERE TO WRITE THE MOVIES TO DISK
-    # TODO
+    for movie in movies:
+        writer.writerow(movie)
 
 
 def simple_get(url):

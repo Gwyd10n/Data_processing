@@ -56,7 +56,7 @@ def calc_mean():
 
     # Check if output is correct
     if len(average_ratings) == len(keys):
-        return [keys, average_ratings]
+        return [list(map(int, keys)), average_ratings]
     else:
         sys.exit("Datasets don't match")
 
@@ -65,8 +65,8 @@ def plot(data):
     """
     Plot data on graph
     """
-    # TODO
     plt.plot(data[0], data[1])
+    plt.axis([2007.5, 2017.5, 0, 10])
     plt.ylabel('Rating')
     plt.xlabel('Year')
     plt.show()

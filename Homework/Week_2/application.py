@@ -102,8 +102,23 @@ def plot_box(df, column_name):
     plt.show()
 
 
-def save_json():
-    pass
+def save_json(df):
+    """
+    write data frame to json file.
+    :param df: object
+    :return: none
+    """
+    dict = {}
+    for row in df.iterrows():
+        dict[row[1]['Country']] = {'Region' : row[1]['Region'],
+                                   'Pop. Density (per sq. mi.)' : row[1]['Pop. Density (per sq. mi.)'],
+                                   'Infant mortality (per 1000 births)' : row[1]['Infant mortality (per 1000 births)'],
+                                   'GDP ($ per capita) dollars' : row[1]['GDP ($ per capita) dollars']
+                                   }
+
+    with open('data.json', 'w', encoding='utf8') as outfile:
+        data = json.dumps(dict, indent=4, sort_keys=False, separators=(',', ': '), ensure_ascii=False)
+        outfile.write(data)
 
 
 
@@ -111,7 +126,7 @@ if __name__ == "__main__":
     data = clean_data(read_csv('input.csv'))
     centr_tend(data, 'GDP ($ per capita) dollars')
     five_nr_summ(data, 'Infant mortality (per 1000 births)')
-    save_json()
+    save_json(data)
     plot_hist(data, 'GDP ($ per capita) dollars')
     plot_box(data, 'Infant mortality (per 1000 births)')
 

@@ -2,4 +2,5 @@ Q: Explain the difference between the == operator and the === operator.
 A: == operator checks if values are the same, values are coverterd if necesary ie. 0 == false is true.
    The === operator also checks if values ore of the same type ie. 0(integer) === false(boolean) is false.
 
-Q: 
+Q: Explain what a closure is. (Note that JavaScript programs use closures very often).
+A: Enclosing a variable in a function, so the value of the variable is preserved even when the function is completed.

@@ -16,11 +16,10 @@ def read_txt(infile):
             string_list = re.sub('[\n\t ]', '', line).split(',')
             try:
                 data_list = [int(val) for val in string_list]
-                data[data_list[1]] = {'TG': data_list[2], 'PG': data_list[3]}
+                data[data_list[1]] = {'TG': data_list[2], 'UG': data_list[3]}
             except ValueError:
                 pass
     file.close()
-    print(data)
     return data
 
 

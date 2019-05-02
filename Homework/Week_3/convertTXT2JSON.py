@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Name: Gwydion Oostvogel
-# Student number: 12578002
+# Student nr: 12578002
 
 import sys
 import re

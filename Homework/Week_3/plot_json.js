@@ -71,7 +71,6 @@ function draw() {
   ctx.moveTo(xMin + ((xMax - xMin) / 36), maxYAxisVal - DATA[KEYS[0]]['TG']);
   for (var i = 1; i < KEYS.length; i += 1) {
     ctx.lineTo(xMin + ((xMax - xMin) / 38) + i * ((xMax - xMin - 25) / KEYS.length), maxYAxisVal - DATA[KEYS[i]]['TG']);
-    console.log(i, (DATA[KEYS[i]]['TG']));
   }
   ctx.stroke();
 }

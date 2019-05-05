@@ -13,19 +13,18 @@ function loadData(fileName) {
     if (txtFile.readyState === 4 && txtFile.status == 200) {
       window.DATA = (JSON.parse(txtFile.responseText));
     }
-  }
+  };
   txtFile.open("GET", fileName, false);
   txtFile.send();
 }
 
 function draw() {
-  const canvas = document.getElementById('temp_graph');
-  const ctx = canvas.getContext('2d');
+  var canvas = document.getElementById('temp_graph');
+  var ctx = canvas.getContext('2d');
 
   var height = 600;
   var width = 950;
   var maxYAxisVal = 425;
-  var xRange = 365 * 3;
 
   var yMax = 25;
   var yMin = height - 75;
@@ -36,12 +35,12 @@ function draw() {
   ctx.strokeStyle = "#000";
   ctx.moveTo(xMin, yMax);
   ctx.lineTo(xMin, yMin + 25);
-  ctx.moveTo(xMin - 25, yMin)
-  ctx.lineTo(xMax + 25, yMin)
+  ctx.moveTo(xMin - 25, yMin);
+  ctx.lineTo(xMax + 25, yMin);
   ctx.stroke();
   ctx.textAlign = "middle";
-  ctx.fillText("Temp.", 25, 10)
-  ctx.fillText("Month", xMin + (xMax-xMin) / 2, yMin + 50)
+  ctx.fillText("Temp.", 25, 10);
+  ctx.fillText("Month", xMin + (xMax-xMin) / 2, yMin + 50);
 
   // Create y labels.
   for(var i = yMax; i <= yMin; i += 25) {
@@ -61,8 +60,8 @@ function draw() {
     ctx.fillText(months[i % 12], xMin + ((xMax - xMin) / 36) * (i + 1) + 2.5, yMin + 10);
     ctx.strokeStyle = "#000";
     ctx.beginPath();
-    ctx.moveTo(xMin + ((xMax - xMin) / 36) * (i + 1), yMin)
-    ctx.lineTo(xMin + ((xMax - xMin) / 36) * (i + 1), yMin + 5)
+    ctx.moveTo(xMin + ((xMax - xMin) / 36) * (i + 1), yMin);
+    ctx.lineTo(xMin + ((xMax - xMin) / 36) * (i + 1), yMin + 5);
     ctx.stroke();
   }
 

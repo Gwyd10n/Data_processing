@@ -23,5 +23,11 @@ function loadData() {
     txtFile.send();
 }
 
+function createPage() {
+    d3.select("head").append("title").text("Renewable energy");
+    d3.select("body").append("h1").text("Renewable energy consumption")
+    loadData();
+}
 
-loadData();
+
+createPage();

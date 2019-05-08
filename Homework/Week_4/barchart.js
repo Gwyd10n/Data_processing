@@ -5,7 +5,8 @@
 
 function createChart(data) {
     "use strict";
-    d3.select("body").selectAll("p").data(data).enter().append("p").text("New paragraph!");
+    var keys = Object.keys(data);
+    d3.select("body").selectAll("p").data(keys).enter().append("p").text(function (d) { return d; });
 }
 
 function loadData() {
@@ -14,7 +15,8 @@ function loadData() {
     var txtFile = new XMLHttpRequest();
     txtFile.onreadystatechange = function () {
         if (txtFile.readyState === 4 && txtFile.status === 200) {
-            createChart(JSON.parse(txtFile.responseText));
+            // createChart(JSON.parse(txtFile.responseText));
+            createChart([1, 2, 3, 4, 5]);
         }
     };
     txtFile.open("GET", fileName);

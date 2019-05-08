@@ -20,7 +20,9 @@ def conv_json(infile, index_col, columns, filter_by):
     if index_col != '':
         df = df.set_index(index_col, verify_integrity=True)
         print("Index column done")
-        print(df)
+        print("Show selected data? [y / n] > ", end='')
+        if input() == 'y':
+            print("Data:\n", df)
 
     df.to_json(infile+".json", orient="index")
     print("Write to JSON done")
@@ -61,6 +63,7 @@ if __name__ == "__main__":
                     filter_by = []
             else:
                 filter_by.append([f_col, f_val])
+            print("Filter added")
 
         elif user_in == "UNDO FILTER":
             filter_by.pop()
@@ -77,4 +80,3 @@ if __name__ == "__main__":
             print(user_in, "added")
 
     conv_json(sys.argv[1], index_col, columns, filter_by)
-

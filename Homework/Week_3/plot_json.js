@@ -13,8 +13,7 @@ function loadData(fileName) {
     if (txtFile.readyState === 4 && txtFile.status == 200) {
       window.DATA = (JSON.parse(txtFile.responseText));
     }
-  }ß
-  ;
+  };
   txtFile.open("GET", fileName, false);
   txtFile.send();
 }

@@ -13,7 +13,8 @@ function loadData(fileName) {
     if (txtFile.readyState === 4 && txtFile.status == 200) {
       window.DATA = (JSON.parse(txtFile.responseText));
     }
-  };
+  }ß
+  ;
   txtFile.open("GET", fileName, false);
   txtFile.send();
 }
@@ -38,7 +39,7 @@ function draw() {
   ctx.moveTo(xMin - 25, yMin);
   ctx.lineTo(xMax + 25, yMin);
   ctx.stroke();
-  ctx.textAlign = "middle";
+  ctx.textAlign = "center";
   ctx.fillText("Temp.", 25, 10);
   ctx.fillText("Month", xMin + (xMax-xMin) / 2, yMin + 50);
 

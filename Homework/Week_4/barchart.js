@@ -15,7 +15,7 @@ function createChart(filename) {
         .range([0, width])
         .padding(0.1);
     let yScale = d3.scaleLinear()
-        .range([height, 0]);
+        .range([height, margin.top]);
 
     // Create svg element
     let svg = d3.select("body").append("svg");
@@ -31,7 +31,7 @@ function createChart(filename) {
             xScale.domain(data.map(function (d) {
                 return d.location;
             }));
-            yScale.domain([0, 100]);
+            yScale.domain([0, 1]);
 
 
 
@@ -43,15 +43,14 @@ function createChart(filename) {
                 })
                 .attr("width", xScale.bandwidth())
                 .attr("y", function (d) {
-                    return yScale(d.value);
+                    return yScale(d.value / 100);
                 })
                 .attr("height", function (d) {
-                    return height - yScale(d.value);
+                    return height - yScale(d.value / 100);
                 });
             // Create the axes
             svg.append("g").attr("transform", `translate(${margin.left},${height})`).call(d3.axisBottom(xScale));
-            // svg.append("g").attr("transform", "yAxis").call(d3.axisLeft(yScale));
-            svg.append("g").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(yScale));
+            svg.append("g").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(yScale).tickFormat(d3.format(".0%")));
 
         });
 }

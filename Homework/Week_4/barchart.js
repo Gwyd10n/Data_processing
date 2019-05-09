@@ -17,8 +17,8 @@ function createChart(filename) {
     let yScale = d3.scaleLinear()
         .range([height, 0]);
 
-    // Create svg object
-    var svg = d3.select("body").append("svg");
+    // Create svg element
+    let svg = d3.select("body").append("svg");
     svg.attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -27,33 +27,32 @@ function createChart(filename) {
     // Get data
     d3.json(filename)
         .then(function (data) {
-
-
             // Scale domains
             xScale.domain(data.map(function (d) {
                 return d.location;
             }));
-            yScale.domain([0, d3.max(data, function (d) {
-                return d.value;
-            })]);
+            yScale.domain([0, 100]);
+
+
 
             // Create bars
             svg.selectAll(".bar").data(data).enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", function (d) {
-                    return xScale(d.location);
+                    return xScale(d.location) + margin.left;
                 })
                 .attr("width", xScale.bandwidth())
                 .attr("y", function (d) {
-                    return xScale(d.value);
+                    return yScale(d.value);
                 })
                 .attr("height", function (d) {
                     return height - yScale(d.value);
                 });
-
             // Create the axes
-            svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(xScale));
-            svg.append("g").call(d3.axisLeft(yScale));
+            svg.append("g").attr("transform", `translate(${margin.left},${height})`).call(d3.axisBottom(xScale));
+            // svg.append("g").attr("transform", "yAxis").call(d3.axisLeft(yScale));
+            svg.append("g").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(yScale));
+
         });
 }
 

@@ -24,7 +24,7 @@ def conv_json(infile, index_col, columns, filter_by):
         if input() == 'y':
             print("Data:\n", df)
 
-    df.to_json(infile+".json", orient="index")
+    df.to_json(infile+".json", orient="records")
     print("Write to JSON done")
 
 
@@ -36,9 +36,10 @@ if __name__ == "__main__":
     columns = []
     print("Index column (press enter to skip) > ", end='')
     index_col = input()
-    columns.append(index_col)
-    print(index_col, "added")
-    print(index_col, "set to index column")
+    if index_col != '':
+        columns.append(index_col)
+        print(index_col, "added")
+        print(index_col, "set to index column")
 
     while 1:
         print("Columns to include (type HELP for commands) > ", end='')

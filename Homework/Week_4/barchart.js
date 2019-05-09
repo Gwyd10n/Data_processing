@@ -1,66 +1,70 @@
 
 
-function createChart(data) {
+function createChart(filename) {
     "use strict";
-    // Create arrays with the data in the json file
-    let keys = Object.keys(data);
-    let dataY = new Array(keys.length);
-    for (let i = 0; i < dataY.length; i += 1) {
-        dataY[i] = data[keys[i]]['value'];
-    }
     // Add some space between edge and chart
     d3.select("body").append("div").attr("class", "spacer");
 
-    // Create chart
-    // TODO
-    let width = 750;
-    let height = 500;
-    let lb_margin = 50;
-    let rt_margin = 25;
-    let svg = d3.select("body").append("svg");
-    svg.attr("width", width).attr("height", height);
-    // Create axes
-    // let xAxis = d3.svg.axis().scale(width).orient("bottom");
-    // svg.append("g").call(xAxis);
-    svg.append("g")
-    .call(d3.svg.axis()
-                .scale(xScale)
-                .orient("bottom"));
+    // Define element dimensions
+    let margin = {left: 40, right: 15, top: 15, bottom: 30};
+    let width = 1100 - margin.left - margin.right;
+    let height = 450 - margin.top - margin.bottom;
+
+    // Create scales
+    let xScale = d3.scaleBand()
+        .range([0, width])
+        .padding(0.1);
+    let yScale = d3.scaleLinear()
+        .range([height, 0]);
+
+    // Create svg object
+    var svg = d3.select("body").append("svg");
+    svg.attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Get data
+    d3.json(filename)
+        .then(function (data) {
 
 
+            // Scale domains
+            xScale.domain(data.map(function (d) {
+                return d.location;
+            }));
+            yScale.domain([0, d3.max(data, function (d) {
+                return d.value;
+            })]);
 
-    // svg.append("line").attr("x1", lb_margin)
-    //     .attr("y1", rt_margin)
-    //     .attr("x2", lb_margin)
-    //     .attr("y2", height - lb_margin)
-    //     .attr("stroke", "black");
-    // Create bars
-    // TODO
-    svg.selectAll("rect").data(dataY).enter().append("rect").attr("x", 0).attr("y", 0).attr("width", 20).attr("height", 100);
+            // Create bars
+            svg.selectAll(".bar").data(data).enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", function (d) {
+                    return xScale(d.location);
+                })
+                .attr("width", xScale.bandwidth())
+                .attr("y", function (d) {
+                    return xScale(d.value);
+                })
+                .attr("height", function (d) {
+                    return height - yScale(d.value);
+                });
+
+            // Create the axes
+            svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(xScale));
+            svg.append("g").call(d3.axisLeft(yScale));
+        });
 }
 
-function loadData() {
-    "use strict";
-    // Read json file
-    let fileName = "data.json";
-    let txtFile = new XMLHttpRequest();
-    txtFile.onreadystatechange = function () {
-        if (txtFile.readyState === 4 && txtFile.status === 200) {
-            // Create a bar chart with the data in the json file
-            createChart(JSON.parse(txtFile.responseText))
-        }
-    };
-    txtFile.open("GET", fileName);
-    txtFile.send();
-}
 
 function createPage() {
     "use strict";
     // Create header and head
     d3.select("head").append("title").text("Renewable energy");
     d3.select("body").append("h1").text("Percentage renewable energy of primary energy supply");
-    // read csv file
-    loadData();
+    // Create bar chart
+    createChart("data.json");
 }
 
 // Create the web page

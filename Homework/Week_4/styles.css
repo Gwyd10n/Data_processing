@@ -1,8 +1,73 @@
-.bar {
-    fill: teal;
+/* Source: https://stackoverflow.com/questions/643879/css-to-make-html-page-footer-stay-at-bottom-of-the-page-with-a-minimum-height-b */
+html {
+    height:100%;
 }
-div.spacer {
-    display: inline-block;
-    width: 5%;
-    height: 5%;
+
+body {
+    min-height:100%;
+    padding:0;
+    margin:0;
+    position:relative;
+}
+
+body {
+  position: absolute;
+}
+
+body::after {
+  content: '';
+  display: block;
+  height: 50px;
+}
+
+footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  height: 10px;
+}
+
+/*Source: http://bl.ocks.org/Caged/6476579*/
+.d3-tip {
+  line-height: 1;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.bar {
+    fill: #185d82;
+}
+
+.bar:hover {
+  fill: #35ff2f;
+}
+
+svg.chart {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+div.description {
+    padding-left: 10%;
+    padding-right: 10%;
 }

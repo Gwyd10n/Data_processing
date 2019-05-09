@@ -2,8 +2,6 @@
 
 function createChart(filename) {
     "use strict";
-    // Add some space between edge and chart
-    d3.select("body").append("div").attr("class", "spacer");
 
     // Define element dimensions
     let margin = {left: 40, right: 15, top: 15, bottom: 30};
@@ -17,12 +15,22 @@ function createChart(filename) {
     let yScale = d3.scaleLinear()
         .range([height, margin.top]);
 
+    // Source: http://bl.ocks.org/Caged/6476579
+    let tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (d) {
+            return `Renewable energy used: <span style='color:#6199ff'>${d.value}%</span>`;
+        });
+
     // Create svg element
-    let svg = d3.select("body").append("svg");
+    let svg = d3.select("body").append("svg").attr("class", "chart");
     svg.attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.call(tip);
 
     // Get data
     d3.json(filename)
@@ -47,11 +55,15 @@ function createChart(filename) {
                 })
                 .attr("height", function (d) {
                     return height - yScale(d.value / 100);
-                });
-            // Create the axes
-            svg.append("g").attr("transform", `translate(${margin.left},${height})`).call(d3.axisBottom(xScale));
-            svg.append("g").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(yScale).tickFormat(d3.format(".0%")));
+                })
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
 
+            // Create axes
+            svg.append("g").attr("transform", `translate(${margin.left},${height})`)
+                .call(d3.axisBottom(xScale));
+            svg.append("g").attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale).tickFormat(d3.format(".0%")));
         });
 }
 
@@ -63,10 +75,12 @@ function createPage() {
     d3.select("body").append("h1").text("Percentage renewable energy of primary energy supply");
     // Create bar chart
     createChart("data.json");
+    d3.select("body").append("div").text("Renewable energy is defined as the contribution of renewables to total primary energy supply (TPES). Renewables include the primary energy equivalent of hydro (excluding pumped storage), geothermal, solar, wind, tide and wave sources. Energy derived from solid biofuels, biogasoline, biodiesels, other liquid biofuels, biogases and the renewable fraction of municipal waste are also included. Biofuels are defined as fuels derived directly or indirectly from biomass (material obtained from living or recently living organisms). This includes wood, vegetal waste (including wood waste and crops used for energy production), ethanol, animal materials/wastes and sulphite lyes. Municipal waste comprises wastes produced by the residential, commercial and public service sectors that are collected by local authorities for disposal in a central location for the production of heat and/or power. This indicator is measured in thousand toe (tonne of oil equivalent) as well as in percentage of total primary energy supply.")
+        .attr("class", "description");
+    d3.select("body").append("footer").text("Gwydion Oostvogel, 12578002");
 }
 
 // Create the web page
 createPage();
 
 
-// Renewable energy is defined as the contribution of renewables to total primary energy supply (TPES). Renewables include the primary energy equivalent of hydro (excluding pumped storage), geothermal, solar, wind, tide and wave sources. Energy derived from solid biofuels, biogasoline, biodiesels, other liquid biofuels, biogases and the renewable fraction of municipal waste are also included. Biofuels are defined as fuels derived directly or indirectly from biomass (material obtained from living or recently living organisms). This includes wood, vegetal waste (including wood waste and crops used for energy production), ethanol, animal materials/wastes and sulphite lyes. Municipal waste comprises wastes produced by the residential, commercial and public service sectors that are collected by local authorities for disposal in a central location for the production of heat and/or power. This indicator is measured in thousand toe (tonne of oil equivalent) as well as in percentage of total primary energy supply.

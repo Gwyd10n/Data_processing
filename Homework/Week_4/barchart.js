@@ -41,8 +41,6 @@ function createChart(filename) {
             }));
             yScale.domain([0, 1]);
 
-
-
             // Create bars
             svg.selectAll(".bar").data(data).enter().append("rect")
                 .attr("class", "bar")

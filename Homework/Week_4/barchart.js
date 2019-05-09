@@ -10,8 +10,9 @@ function createChart(data) {
     }
 
     // d3.select("body").selectAll("div").data(keys).enter().append("div").text(function (d) {return d;}).attr("class", "bar");
-    for (var i = 0; i < )
+    for (var i = 0; i < 3; i += 1) {
         d3.select("body").append("div").attr("class", "spacer");
+    }
     d3.select("body").selectAll("div").data(dataY).enter().append("div").attr("class", "bar").style("height", function (d) {return d * 5  + "px";});
 }
 

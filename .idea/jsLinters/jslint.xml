@@ -4,6 +4,7 @@
     <option bitwise="true" />
     <option browser="true" />
     <option devel="true" />
+    <option for="true" />
     <option maxerr="50" />
     <option maxlen="120" />
     <option globals="d3" />

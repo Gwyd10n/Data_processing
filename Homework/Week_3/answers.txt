@@ -1,3 +1,5 @@
+Gwydion Oostvogel, 12578002
+
 Q: Explain the difference between the == operator and the === operator.
 A: == operator checks if values are the same, values are coverterd if necesary ie. 0 == false is true. The === operator also checks if values ore of the same type ie. 0(integer) === false(boolean) is false.
 

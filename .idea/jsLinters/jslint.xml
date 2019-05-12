@@ -8,7 +8,7 @@
     <option for="true" />
     <option maxerr="50" />
     <option maxlen="120" />
-    <option globals="d3" />
+    <option globals="d3, window" />
     <option single="true" />
   </component>
 </project>

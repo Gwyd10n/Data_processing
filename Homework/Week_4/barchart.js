@@ -21,7 +21,7 @@ function createChart(filename) {
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function (d) {
-            return `Renewable energy used: <span style='color:#6199ff'>${d.value}%</span>`;
+            return `Renewable energy: <span style='color:#6199ff'>${d.value}%</span>`;
         });
 
     // Create svg element

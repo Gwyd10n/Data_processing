@@ -75,7 +75,8 @@ function createPage() {
     createChart("data.json");
     d3.select("body").append("div").text("Renewable energy is defined as the contribution of renewables to total primary energy supply (TPES). Renewables include the primary energy equivalent of hydro (excluding pumped storage), geothermal, solar, wind, tide and wave sources. Energy derived from solid biofuels, biogasoline, biodiesels, other liquid biofuels, biogases and the renewable fraction of municipal waste are also included. Biofuels are defined as fuels derived directly or indirectly from biomass (material obtained from living or recently living organisms). This includes wood, vegetal waste (including wood waste and crops used for energy production), ethanol, animal materials/wastes and sulphite lyes. Municipal waste comprises wastes produced by the residential, commercial and public service sectors that are collected by local authorities for disposal in a central location for the production of heat and/or power. This indicator is measured in thousand toe (tonne of oil equivalent) as well as in percentage of total primary energy supply.")
         .attr("class", "description");
-    d3.select("body").append("footer").text("Gwydion Oostvogel, 12578002");
+    d3.select("body").append("i").text("source: OECD").attr("class", "source");
+    d3.select("body").append("footer").text("Gwydion Oostvogel, 12578002").attr("class", "description");
 }
 
 // Create the web page

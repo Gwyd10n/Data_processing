@@ -66,7 +66,6 @@ function createChart(filename) {
         });
 }
 
-
 function createPage() {
     "use strict";
     // Create header and head

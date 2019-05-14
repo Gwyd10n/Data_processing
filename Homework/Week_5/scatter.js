@@ -3,7 +3,58 @@
 
 function scatterPlot(data) {
     "use strict";
-    console.log()
+    // console.log(data[0]);
+    let xYear = 5;
+    let yYear = 55;
+    let dataArr = [];
+
+    // for (let key in data[0]) {
+    //
+    //     if (data[0].hasOwnProperty(key) && data[1].hasOwnProperty(key)) {
+    //         if (data[0][key][xYear] && data[1][key][yYear]) {
+    //             dataArr.push([key, data[0][key][xYear].Datapoint, data[1][key][yYear].Datapoint]);
+    //             // console.log(key, data[0][key][xYear].Datapoint, data[1][key][yYear].Datapoint);
+    //         }
+    //     }
+    // }
+
+    for (let key in data[0]) {
+        if (data[0][key] && data[1].hasOwnProperty(key)) {
+            if (data[0][key][xYear] && data[1][key][yYear]) {
+                c++;
+                dataArr.push([key, data[0][key][xYear].Datapoint, data[1][key][yYear].Datapoint]);
+                // console.log(key, data[0][key][xYear].Datapoint, data[1][key][yYear].Datapoint);
+            }
+        }
+    }
+
+    console.log(dataArr);
+
+    let keys0 = [];
+    let keys1 = [];
+    let inBoth = 0;
+
+    for (let key in data[0]) {
+        if (data[0][key][xYear]) {
+            keys0.push(key);
+        }
+    }
+
+    for (let key in data[1]) {
+        if (data[1][key][yYear]) {
+            keys1.push(key);
+        }
+    }
+
+    for (let key0 in keys0) {
+        if (key0 in keys1) {
+            inBoth += 1;
+        }
+    }
+
+    console.log("keys0", keys0);
+    console.log("keys1", keys1);
+    console.log("inBoth", inBoth);
 }
 
 function transformGDP(data){
@@ -63,7 +114,7 @@ function transformGDP(data){
                   dataObject[tempObj["Country"]] = [tempObj];
                 } else if (dataObject[tempObj["Country"]][dataObject[tempObj["Country"]].length - 1]["Year"] != tempObj["Year"]) {
                     dataObject[tempObj["Country"]].push(tempObj);
-                };
+                }
             }
         });
     });
@@ -145,10 +196,12 @@ function cleanData(data) {
     "use strict";
     let dataCleaned = [transformResponse(data[0]), transformResponse(data[1]), transformGDP(data[2])];
     scatterPlot(dataCleaned);
+    // luister voor dropdown menu input?
 }
 
 function getData() {
     "use strict";
+    // links API
     let teensInViolentArea = "https://stats.oecd.org/SDMX-JSON/data/CWB/AUS+AUT+BEL+BEL-VLG+CAN+CHL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OAVG+NMEC+BRA+BGR+CHN+COL+CRI+HRV+CYP+IND+IDN+MLT+PER+ROU+RUS+ZAF.CWB11/all?startTime=2010&endTime=2017";
     let teenPregnancies = "https://stats.oecd.org/SDMX-JSON/data/CWB/AUS+AUT+BEL+BEL-VLG+CAN+CHL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OAVG+NMEC+BRA+BGR+CHN+COL+CRI+HRV+CYP+IND+IDN+MLT+PER+ROU+RUS+ZAF.CWB46/all?startTime=1960&endTime=2017";
     let GDP = "https://stats.oecd.org/SDMX-JSON/data/SNA_TABLE1/AUS+AUT+BEL+CAN+CHL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+EU28+EU15+OECDE+OECD+OTF+NMEC+ARG+BRA+BGR+CHN+COL+CRI+HRV+CYP+IND+IDN+MLT+ROU+RUS+SAU+ZAF+FRME+DEW.B1_GE.HCPC/all?startTime=2012&endTime=2018&dimensionAtObservation=allDimensions";
@@ -156,7 +209,7 @@ function getData() {
     let requests = [d3.json(teensInViolentArea), d3.json(teenPregnancies), d3.json(GDP)];
 
     Promise.all(requests).then(function (response) {
-        cleanData(response);
+         cleanData(response);
     }).catch(function (e) {
         throw (e);
     });

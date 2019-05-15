@@ -2,24 +2,40 @@
 // Student nr: 12578002
 
 "use strict";
+let data = [];
 
-function scatterPlot(data, svg) {
+function scatterplot() {
+
+    console.log(data);
+
+    let width = 600;
+    let height = 450;
+    let margin = 30;
     let year = document.getElementById("year").options[document.getElementById("year").selectedIndex].value;
     let plotData = data[year];
 
-    svg.selectAll("circle")
-   .data(plotData)
-   .enter()
-   .append("circle")
-       .attr("cx", function(d) {
-        console.log("x", d[1])
-        return 10 * d[1];
-   })
-   .attr("cy", function(d) {
-        console.log("y", d[2])
-        return 10 * d[2];
-   })
-   .attr("r", 5);
+    let xScale = d3.scaleLinear().domain([0, d3.max(data[year], function(d) { return d[1]; })])
+        .range([margin, width - margin]);            // d3.max(data[year], function(d) { return d[1]; })
+    console.log(xScale(20));
+    let yScale = d3.scaleLinear().domain([0, d3.max(data[year], function(d) {return d[2]; })])
+        .range([height - margin, margin]);
+
+    // Remove old chart
+    d3.select("#plot").remove();
+    let svg = d3.select("#scatter").append("svg").attr("width", width).attr("height", height).attr("id", "plot");
+
+    // Create axes
+    svg.append("g").attr("transform", `translate(${margin},0)`)
+                .call(d3.axisLeft(yScale));
+
+    svg.selectAll("circle").data(plotData).enter()
+        .append("circle").attr("class", "dot").attr("cx", function(d) {
+            return xScale(d[1]);
+        })
+        .attr("cy", function(d) {
+            return yScale(d[2]);
+        })
+        .attr("r", 5);
 
 }
 
@@ -111,10 +127,6 @@ function cleanData(dataUnc) {
     return dataArr;
 }
 
-function doSomething() {
-    alert("year changed");
-}
-
 window.onload = function () {
     // links API
     let teensInViolentArea = "https://stats.oecd.org/SDMX-JSON/data/CWB/AUS+AUT+BEL+BEL-VLG+CAN+CHL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OAVG+NMEC+BRA+BGR+CHN+COL+CRI+HRV+CYP+IND+IDN+MLT+PER+ROU+RUS+ZAF.CWB11/all?startTime=2010&endTime=2016";
@@ -123,25 +135,8 @@ window.onload = function () {
     let requests = [d3.json(teensInViolentArea), d3.json(teenPregnancies)];
 
     Promise.all(requests).then(function (response) {
-        let data = cleanData(response);
-
-        //////////////////////NIET IN EINDDING////////////////////////////
-        console.log(data);
-        //////////////////////////////////////////////////////////////////
-        let width = 400;
-        let height = 300;
-
-        let svg = d3.select("#scatter").append("svg").attr("width", width).attr("height", height);
-
-        scatterPlot(data, svg);
-
-        // luister voor dropdown menu input?
-        while (1) {
-            document.getElementById("year").addEventListener("change", doSomething());
-        }
-
-
-
+        data = cleanData(response);
+        scatterplot();
     }).catch(function (e) {
         throw (e);
     });

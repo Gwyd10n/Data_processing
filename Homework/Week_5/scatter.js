@@ -24,9 +24,12 @@ function scatterplot() {
     d3.select("#plot").remove();
     let svg = d3.select("#scatter").append("svg").attr("width", width).attr("height", height).attr("id", "plot");
 
-    // Create axes
+    // Create y axis
     svg.append("g").attr("transform", `translate(${margin},0)`)
-                .call(d3.axisLeft(yScale));
+        .call(d3.axisLeft(yScale));
+    // Create x axis
+    svg.append("g").attr("transform", `translate(0,${height - margin})`)
+        .call(d3.axisBottom(xScale));
 
     svg.selectAll("circle").data(plotData).enter()
         .append("circle").attr("class", "dot").attr("cx", function(d) {

@@ -55,7 +55,7 @@ function scatterplot() {
 
 
     let svg = d3.select("#scatter").append("svg")
-        .attr("width", width + lWidth).attr("height", height).attr("id", "plot");
+        .attr("width", width + 2 * lWidth).attr("height", height).attr("id", "plot");
 
     // Create y axis
     svg.append("g").attr("transform", `translate(${margin},0)`)
@@ -85,27 +85,23 @@ function scatterplot() {
         });
 
     // Create legend
-    let legend = svg.selectAll(".legend").data(plotData).enter().append("g").attr("class", "legend")
+    let legend = svg.selectAll(".legend").data(plotData).enter()
+        .append("g").attr("class", "legend")
         .attr("transform", function(d, i) {
-            return `translate(0,${i * (height / (plotData.length + 3))})`;
+            return `translate(0,${i * ((height - margin) / (plotData.length))})`;
         });
 
-    legend.append("rect").attr("x", width + margin).attr("width", 15).attr("height", 15).style("fill", function (d, i) {
+    legend.append("rect").attr("x", width + margin).attr("width", 15)
+        .attr("height", (height / (plotData.length + 5)))
+        .style("fill", function (d, i) {
             return cScale(i);
         });
 
-
-    // legend = svg.selectAll(".legend")
-    //   .data(color.domain())
-    // .enter().append("g")
-    //   .attr("class", "legend")
-    //   .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-    // legend.append("rect")
-    //   .attr("x", width - 18)
-    //   .attr("width", 18)
-    //   .attr("height", 18)
-    //   .style("fill", color);
+    legend.append("text").attr("x", width + 2 * margin).attr("y", (height / (plotData.length + 5)) / 2)
+        .attr("dy", ".35em").style("text-anchor", "start")
+        .text(function(d) {
+            return d[0];
+        });
 }
 
 function transformResponse(data) {

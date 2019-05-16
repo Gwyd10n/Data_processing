@@ -6,40 +6,128 @@ let data = [];
 
 function scatterplot() {
 
-    console.log(data);
-
     let width = 600;
     let height = 450;
     let margin = 30;
-    let year = document.getElementById("year").options[document.getElementById("year").selectedIndex].value;
+    let year = document.getElementById("year").
+                options[document.getElementById("year").selectedIndex].value;
     let plotData = data[year];
 
-    let xScale = d3.scaleLinear().domain([0, d3.max(data[year], function(d) { return d[1]; })])
-        .range([margin, width - margin]);            // d3.max(data[year], function(d) { return d[1]; })
-    console.log(xScale(20));
-    let yScale = d3.scaleLinear().domain([0, d3.max(data[year], function(d) {return d[2]; })])
-        .range([height - margin, margin]);
+    // Create colours, could not use colorBrewer bc the max number of colours they provide is 12
+    let colours = [];
+    let hue = [30, 50, 80];
+    let saturation = [90, 100];
+    let satLen = saturation.length;
+    let dataLen = plotData.length;
+    let hueLen = hue.length;
+    let country = "";
 
+    for (let i = 0; i < dataLen; i ++) {
+        country = plotData[i][0];
+        colours.push([country, `hsl(${360 / dataLen * i},${saturation[i % satLen]}%, ${hue[i % hueLen]}%)`]);
+    }
+
+    console.log(colours);
     // Remove old chart
     d3.select("#plot").remove();
-    let svg = d3.select("#scatter").append("svg").attr("width", width).attr("height", height).attr("id", "plot");
+    d3.select("#leg").remove();
+
+    // Create scales
+    let xScale = d3.scaleLinear()
+        .domain([d3.min(plotData, function (d) {
+            return d[1];
+        }) - 1,
+        d3.max(plotData, function (d) {
+            return d[1];
+        }) + 1])
+        .range([margin, width - margin]);
+
+    let yScale = d3.scaleLinear()
+        .domain([d3.min(plotData, function (d) {
+            return d[2];
+        }) - 1,
+        d3.max(plotData, function (d) {
+            return d[2];
+        }) + 1])
+        .range([height - margin, margin]);
+
+
+    let svg = d3.select("#scatter").append("svg")
+        .attr("width", width).attr("height", height).attr("id", "plot");
 
     // Create y axis
     svg.append("g").attr("transform", `translate(${margin},0)`)
         .call(d3.axisLeft(yScale));
+    svg.append("text").attr("class", "label")
+        .attr("transform", "rotate(-90)").attr("y", margin).attr("x", margin - 60)
+        .attr("dy", "0.8em").style("text-anchor", "end").text("Teen pregnancies");
+
     // Create x axis
     svg.append("g").attr("transform", `translate(0,${height - margin})`)
         .call(d3.axisBottom(xScale));
+    svg.append("text").attr("class", "label")
+        .attr("x", width - margin).attr("y", height - margin)
+        .attr("dy", "-0.1em").style("text-anchor", "end").text("Teens in violent area");
 
+    // Plot data
     svg.selectAll("circle").data(plotData).enter()
-        .append("circle").attr("class", "dot").attr("cx", function(d) {
+        .append("circle").attr("class", "dot").attr("cx", function (d) {
             return xScale(d[1]);
         })
-        .attr("cy", function(d) {
+        .attr("cy", function (d) {
             return yScale(d[2]);
         })
-        .attr("r", 5);
+        .attr("r", 5)
+        .style("fill", function (d) {
+            return colours[d[0]];
+        });
 
+    // Create legend
+
+
+    //     let cScale = d3.scaleBand()
+    //     .range([0, width])
+    //     .padding(0.1).domain(colours.map(function (d) {
+    //             return d[0];
+    //         }));
+    //
+    //     let svgLeg = d3.select("#legend").append("svg")
+    //     .attr("width", width).attr("height", 100).attr("id", "leg");
+    //
+    //
+    //
+    //     svg.selectAll(".bar").data(colours).enter().append("rect")
+    //             .attr("y", function (d) {
+    //                 return cScale(d[0]);
+    //             })
+    //             .attr("height", cScale.bandwidth())
+    //             .attr("y", 10)
+    //             .attr("width", 10);
+    //
+    // svgLeg.append("g").call(d3.axisLeft(cScale));
+
+    // let cScale = d3.scaleBand().domain(data.map(function (d) {
+    //             return d[0];
+    //         }))
+    //     .range([0, height])
+    //     .padding(0.5);
+    //
+    // let svgLeg = d3.select("#scatter").append("svg")
+    //     .attr("width", 100).attr("height", height).attr("id", "leg");
+    //
+    // svgLeg.selectAll(".bar").data(plotData).enter()
+    //     // .attr("transform", function(d, i) {
+    //     //     return `translate(0, ${i * 10})`;
+    //     // })
+    //     .append("rect")
+    //     .attr("y", )
+    //     .attr("x", 0).attr("y", function (i) {
+    //                 return i * 10;
+    //             })
+    //     .attr("height", 14).attr("width", 14)
+    //     .style("fill", function (d) {
+    //         return colours[d[0]];
+    //     });
 }
 
 function transformResponse(data) {
@@ -112,22 +200,23 @@ function transformResponse(data) {
 }
 
 function cleanData(dataUnc) {
-    let data = [transformResponse(dataUnc[0]), transformResponse(dataUnc[1])];
-    let years = data[0][Object.keys(data[0])[0]].length;
+    let dataCl = [transformResponse(dataUnc[0]), transformResponse(dataUnc[1])];
+    let years = dataCl[0][Object.keys(dataCl[0])[0]].length;
     let dataArr = [];
 
+    // Parse data to array
     for (let year = 0; year < years; year++) {
         let yearArr = [];
-        for (let key in data[1]) {
-            if (data[0].hasOwnProperty(key)) {
-                if (data[0][key][year] && data[1][key][year]) {
-                    yearArr.push([key, data[0][key][year].Datapoint, data[1][key][year].Datapoint]);
+        for (let key in dataCl[1]) {
+            if (dataCl[0].hasOwnProperty(key)) {
+                if (dataCl[0][key][year] && dataCl[1][key][year]) {
+                    yearArr.push([key, dataCl[0][key][year].Datapoint, dataCl[1][key][year].Datapoint]);
                 }
             }
         }
         dataArr.push(yearArr);
     }
-    return dataArr;
+    data = dataArr;
 }
 
 window.onload = function () {
@@ -138,7 +227,7 @@ window.onload = function () {
     let requests = [d3.json(teensInViolentArea), d3.json(teenPregnancies)];
 
     Promise.all(requests).then(function (response) {
-        data = cleanData(response);
+        cleanData(response);
         scatterplot();
     }).catch(function (e) {
         throw (e);

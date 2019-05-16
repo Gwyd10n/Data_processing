@@ -9,28 +9,26 @@ function scatterplot() {
     let width = 600;
     let height = 450;
     let margin = 30;
+    let lWidth = 150;
     let year = document.getElementById("year").
                 options[document.getElementById("year").selectedIndex].value;
     let plotData = data[year];
 
-    // Create colours, could not use colorBrewer bc the max number of colours they provide is 12
-    let colours = [];
-    let hue = [30, 50, 80];
-    let saturation = [90, 100];
-    let satLen = saturation.length;
-    let dataLen = plotData.length;
-    let hueLen = hue.length;
-    let country = "";
+    // colour source: http://www.two4u.com/color/medium-txt.html
+    let colours = ["#FF0000", "#00FF00", "#0000FF",
+                    "#FF00FF", "#00FFFF", "#FFFF00",
+                    "#000000", "#70DB93", "#9F5F9F",
+                    "#B5A642", "#A62A2A", "#8C7853",
+                    "#A67D3D", "#5F9F9F", "#B87333",
+                    "#FF7F00", "#42426F", "#5C4033",
+                    "#2F4F2F", "#4A766E", "#4F4F2F",
+                    "#9932CD", "#871F78" ,"#6B238E",
+                    "#7093DB", "#855E42", "#D19275",
+                    "#8E2323", "#238E23", "#007FFF"];
 
-    for (let i = 0; i < dataLen; i ++) {
-        country = plotData[i][0];
-        colours.push([country, `hsl(${360 / dataLen * i},${saturation[i % satLen]}%, ${hue[i % hueLen]}%)`]);
-    }
-
-    console.log(colours);
     // Remove old chart
     d3.select("#plot").remove();
-    d3.select("#leg").remove();
+    // d3.select("#leg").remove();
 
     // Create scales
     let xScale = d3.scaleLinear()
@@ -51,9 +49,13 @@ function scatterplot() {
         }) + 1])
         .range([height - margin, margin]);
 
+    let cScale = d3.scaleQuantize()
+        .domain([0, plotData.length])
+        .range(colours);
+
 
     let svg = d3.select("#scatter").append("svg")
-        .attr("width", width).attr("height", height).attr("id", "plot");
+        .attr("width", width + lWidth).attr("height", height).attr("id", "plot");
 
     // Create y axis
     svg.append("g").attr("transform", `translate(${margin},0)`)
@@ -77,57 +79,33 @@ function scatterplot() {
         .attr("cy", function (d) {
             return yScale(d[2]);
         })
-        .attr("r", 5)
-        .style("fill", function (d) {
-            return colours[d[0]];
+        .attr("r", 8)
+        .style("fill", function (d, i) {
+            return cScale(i);
         });
 
     // Create legend
+    let legend = svg.selectAll(".legend").data(plotData).enter().append("g").attr("class", "legend")
+        .attr("transform", function(d, i) {
+            return `translate(0,${i * (height / (plotData.length + 3))})`;
+        });
+
+    legend.append("rect").attr("x", width + margin).attr("width", 15).attr("height", 15).style("fill", function (d, i) {
+            return cScale(i);
+        });
 
 
-    //     let cScale = d3.scaleBand()
-    //     .range([0, width])
-    //     .padding(0.1).domain(colours.map(function (d) {
-    //             return d[0];
-    //         }));
-    //
-    //     let svgLeg = d3.select("#legend").append("svg")
-    //     .attr("width", width).attr("height", 100).attr("id", "leg");
-    //
-    //
-    //
-    //     svg.selectAll(".bar").data(colours).enter().append("rect")
-    //             .attr("y", function (d) {
-    //                 return cScale(d[0]);
-    //             })
-    //             .attr("height", cScale.bandwidth())
-    //             .attr("y", 10)
-    //             .attr("width", 10);
-    //
-    // svgLeg.append("g").call(d3.axisLeft(cScale));
+    // legend = svg.selectAll(".legend")
+    //   .data(color.domain())
+    // .enter().append("g")
+    //   .attr("class", "legend")
+    //   .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-    // let cScale = d3.scaleBand().domain(data.map(function (d) {
-    //             return d[0];
-    //         }))
-    //     .range([0, height])
-    //     .padding(0.5);
-    //
-    // let svgLeg = d3.select("#scatter").append("svg")
-    //     .attr("width", 100).attr("height", height).attr("id", "leg");
-    //
-    // svgLeg.selectAll(".bar").data(plotData).enter()
-    //     // .attr("transform", function(d, i) {
-    //     //     return `translate(0, ${i * 10})`;
-    //     // })
-    //     .append("rect")
-    //     .attr("y", )
-    //     .attr("x", 0).attr("y", function (i) {
-    //                 return i * 10;
-    //             })
-    //     .attr("height", 14).attr("width", 14)
-    //     .style("fill", function (d) {
-    //         return colours[d[0]];
-    //     });
+    // legend.append("rect")
+    //   .attr("x", width - 18)
+    //   .attr("width", 18)
+    //   .attr("height", 18)
+    //   .style("fill", color);
 }
 
 function transformResponse(data) {

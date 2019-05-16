@@ -28,7 +28,6 @@ function scatterplot() {
 
     // Remove old chart
     d3.select("#plot").remove();
-    // d3.select("#leg").remove();
 
     // Create scales
     let xScale = d3.scaleLinear()

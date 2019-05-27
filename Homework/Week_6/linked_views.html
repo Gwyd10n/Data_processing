@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Linked views</title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+    <!-- Import D3 V5 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+      d3v5 = d3;
+      window.d3 = null;
+    </script>
+
+    <!-- Import D3 V3 and TopoJSON -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+    <script src="datamaps.js"></script>
+    <script>
+        d3v3 = d3;
+        window.d3 = null;
+    </script>
+    <!-- REST OF IMPORTS HERE -->
+    <script type="text/javascript" src="linked_views.js"></script>
+
+  </head>
+  <body>
+  <header>
+    Happy people
+  </header>
+
+    <ul>
+        <li>
+          <div id="container" style="position: relative; width: 750px; height: 450px;"></div>
+        </li>
+        <li class="source">
+          <i>Source: </i>
+          <a href = https://happyplanetindex.org/>Happy Planet Index</a>
+        </li>
+    </ul>
+    <footer>Gwydion Oostvogel, 12578002</footer>
+
+
+
+  </body>

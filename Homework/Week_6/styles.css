@@ -1,0 +1,30 @@
+/* Name: Gwydion Oostvogel */
+/* Student nr: 12578002 */
+
+html {
+    height:100%;
+}
+
+header {
+    padding: 1%;
+}
+
+body {
+    min-height:100%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin:0;
+    position:absolute;
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    height: 10px;
+    padding-bottom: 1%;
+}
+
+ul {
+    list-style-type: none;
+}

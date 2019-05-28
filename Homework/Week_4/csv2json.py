@@ -30,7 +30,7 @@ def conv_json(infile, index_col, columns, filter_by):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Error: incorrect number of arguments\nUsage: Python convertCSV2JSON.py name infile")
+        print("Error: incorrect number of arguments\nUsage: Python csv2json.py name infile")
         sys.exit(1)
     filter_by = []
     columns = []

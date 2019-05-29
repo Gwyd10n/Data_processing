@@ -18,7 +18,7 @@ function worldmap(HPIdata) {
     });
     map.updateChoropleth({LOW: "#FF0000"}, {MEDIUM: "#777700"}, {HIGH: "#00FF00"});
     for (let country in HPIdata) {
-        console.log()
+        console.log(HPIdata[country])
     }
 }
 

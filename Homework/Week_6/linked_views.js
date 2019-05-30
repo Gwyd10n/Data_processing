@@ -18,8 +18,13 @@ function worldmap(HPIdata) {
     //     return HPIdata[country]
     // };
 
-    // Create color scheme for countries based in HPI
-    let color = d3v5.scaleSequential(d3v5.interpolateRdYlGn).domain([10, 40]);
+    // Create color scheme for countries based on HPI
+    let HPIval = []
+    for (let key in HPIdata) {
+        HPIval.push(HPIdata[key]['happy_planet_index'])
+    }
+
+    let color = d3v5.scaleSequential(d3v5.interpolateRdYlGn).domain([Math.min(...HPIval), Math.max(...HPIval)]);
     let mapData = {};
     for (let key in HPIdata) {
         let value = HPIdata[key]['happy_planet_index']
@@ -43,12 +48,6 @@ function worldmap(HPIdata) {
             }
         }
     });
-
-
-
-    // for (let country in HPIdata) {
-        map.updateChoropleth({USA: color(getHPI('Belgium'))});
-    // }
 }
 
 function loadJSON(path) {

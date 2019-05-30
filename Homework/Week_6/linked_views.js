@@ -3,8 +3,8 @@
 
 "use strict";
 function createPie(cData) {
-    let width = 300,
-        height = 300,
+    let width = 330,
+        height = 330,
         rad = 150,
         color = d3v5.scaleOrdinal(d3v5.schemeCategory10),
         data = [{"label": "Unhappy", "value":cData["average_life_expectancy"] - cData["happy_life_years"]},
@@ -18,12 +18,8 @@ function createPie(cData) {
             return d.value;
         });
 
-    chart.append("path")
-    .attr("d", arc)
-    .attr("transform", "translate(200,200)")
-
     let arcs = chart.selectAll("g.slice").data(pie)
-        .enter().append("g").attr("class", "slice")
+        .enter().append("g").attr("class", "slice");
 
         arcs.append("path").attr("fill", function(d, i) {
             return color(i);
@@ -39,12 +35,15 @@ function createPie(cData) {
             .text(function(d, i) {
                 return `${data[i].label}: ${(data[i].value).toFixed(1)}`;
             });
+
+        chart.append("text").attr("x", 20).attr("y", rad + 20)
+        .style("text-anchor", "middle").text(`Average life expectancy: ${cData["average_life_expectancy"]}`);
 }
 
 
 function updatePie(Cdata) {
     d3v5.select("#pieplot").remove();
-    createPie(Cdata)
+    createPie(Cdata);
 
 }
 
@@ -92,9 +91,9 @@ function worldmap(HPIdata) {
     });
 
     // create legend
-    let legend = d3v5.select("#legend").style("height", "50px").style("width", "420px").style("position", "relative")
+    let legend = d3v5.select("#legend").style("height", "100px").style("width", "420px").style("position", "relative")
     .append("canvas").attr("height", 1).attr("width", 400).style("height", "10px").style("width", "400px")
-    .style("border", "1px solid #000").style("position", "absolute").style("top", "10px").style("left", "10px")
+    .style("border", "1px solid #000").style("position", "absolute").style("top", "30px").style("left", "10px")
     .node();
 
     let ctx = legend.getContext("2d");
@@ -113,9 +112,13 @@ function worldmap(HPIdata) {
 
     // Create legend axis
     let legendaxis = d3v5.axisBottom().scale(legendscale).ticks(20);
-    let svg = d3v5.select("#legend").append("svg").attr("height", "50px").attr("width", "420px")
-                .style("position", "absolute").style("left", "0px").style("top", "10px");
+    let svg = d3v5.select("#legend").append("svg").attr("height", "100px").attr("width", "420px")
+                .style("position", "absolute").style("left", "0px").style("top", "30px");
     svg.append("g").attr("class", "axis").attr("transform", "translate(10,11)").call(legendaxis);
+
+    svg.append("text").attr("class", "label")
+        .attr("x", 225).attr("y", 45)
+        .style("text-anchor", "middle").text("Happy planet index");
 
     // Create piechart
     createPie(HPIdata["Netherlands"])

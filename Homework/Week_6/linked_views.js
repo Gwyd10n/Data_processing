@@ -14,25 +14,28 @@ function worldmap(HPIdata) {
     }
 
     // Function to get HPI value for country
-    let getHPI = function (country) {
-        return HPIdata[country]
-    };
+    // let getHPI = function (country) {
+    //     return HPIdata[country]
+    // };
 
-    getHPI('Belgium')
+    // Create color scheme for countries based in HPI
+    let color = d3v5.scaleSequential(d3v5.interpolateRdYlGn).domain([10, 40]);
+    let mapData = {};
+    for (let key in HPIdata) {
+        let value = HPIdata[key]['happy_planet_index']
+        mapData[ccdict[key]] = {HPI: value, fillColor: color(value)}
+    }
 
-        let color = d3v3.scale.linear().domain([1,50])
-      .interpolate(d3v3.interpolateHcl)
-      .range([d3v3.rgb("#007AFF"), d3v3.rgb('#FFF500')]);
 
-    // let color = d3v5.scale().domain([1,50]).range(["#FF0000", "#00FF00"]);
-    // let color = d3v5.interpolateRgb("#FF0000", "#00FF00");
-    console.log(color(25))
 
     let map = new Datamap({
         element: document.getElementById("container"),
         projection: 'mercator',
-        data: HPIdata,
-        fills: {defaultFill: "#3f3f3f"},
+        data: mapData,
+        fills: {defaultFill: "#AFAFAF"},
+        highlightFillColor: function(geo) {
+                return geo['fillColor'];
+            },
         geographyConfig: {
             popupTemplate: function (geography) {
                 return '<div class="hoverinfo">' + geography.properties.name + ' HPI: ' +
@@ -43,9 +46,9 @@ function worldmap(HPIdata) {
 
 
 
-    for (let country in HPIdata) {
-        map.updateChoropleth({USA: color(getHPI(country))});
-    }
+    // for (let country in HPIdata) {
+        map.updateChoropleth({USA: color(getHPI('Belgium'))});
+    // }
 }
 
 function loadJSON(path) {
@@ -57,3 +60,4 @@ function loadJSON(path) {
 window.onload = function () {
     loadJSON("dataCSV.json");
 };
+

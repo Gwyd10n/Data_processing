@@ -2,16 +2,16 @@
 // Student nr: 12578002
 
 "use strict";
-function createPie(Cdata) {
+function createPie(cData) {
     let width = 300,
         height = 300,
         rad = 150,
         color = d3v5.scaleOrdinal(d3v5.schemeCategory10),
-        data = [{"label": "Unhappy life years", "value":Cdata["average_life_expectancy"] - Cdata["happy_life_years"]},
-                {"label": "Happy life years", "value":Cdata["happy_life_years"]}];
+        data = [{"label": "Unhappy", "value":cData["average_life_expectancy"] - cData["happy_life_years"]},
+                {"label": "Happy", "value":cData["happy_life_years"]}];
 
     let chart = d3v5.select("#piechart").append("svg").data([data])
-        .attr("width", width).attr("height", height)
+        .attr("width", width).attr("height", height).attr("id", "pieplot")
         .append("g").attr("transform", `translate(${rad},${rad})`),
         arc = d3v5.arc().innerRadius(0).outerRadius(rad),
         pie = d3v5.pie().value(function(d) {
@@ -37,15 +37,14 @@ function createPie(Cdata) {
             })
             .attr("text-anchor", "middle")
             .text(function(d, i) {
-                return `${data[i].label}: ${data[i].value}`;
+                return `${data[i].label}: ${(data[i].value).toFixed(1)}`;
             });
 }
 
 
 function updatePie(Cdata) {
-    let data = [{"label": "Life expectancy", "value":Cdata["average_life_expectancy"]},
-                {"label": "Happy life years", "value":Cdata["happy_life_years"]}];
-    console.log(data);
+    d3v5.select("#pieplot").remove();
+    createPie(Cdata)
 
 }
 

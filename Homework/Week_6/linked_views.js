@@ -44,8 +44,8 @@ function createPie(cData) {
 function updatePie(Cdata) {
     d3v5.select("#pieplot").remove();
     createPie(Cdata);
-
 }
+
 
 function worldmap(HPIdata) {
 
@@ -73,7 +73,7 @@ function worldmap(HPIdata) {
         element: document.getElementById("container"),
         projection: "mercator",
         data: mapData,
-        fills: {defaultFill: "#AFAFAF"},
+        fills: {defaultFill: "#CFCFCF"},
         highlightFillColor: function(geo) {
                 return geo["fillColor"];
             },
@@ -81,7 +81,9 @@ function worldmap(HPIdata) {
             popupTemplate: function (geography) {
                 return `<div class="hoverinfo"> ${geography.properties.name} ` +
                     `HPI: ${HPIdata[geography.properties.name]["happy_planet_index"]}</div>`;
-            }
+            },
+            highlightOnHover: true,
+            highlightFillColor: "#43A2CA",
         },
         done: function(datamap) {
             datamap.svg.selectAll(".datamaps-subunit").on("click", function(geography) {
